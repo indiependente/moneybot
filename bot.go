@@ -27,7 +27,7 @@ func main() {
         begin := time.Now()
         symbols := strings.SplitN(r.URL.Path, "/", 3)[2]
         sym := strings.SplitN(symbols, "_", 2)
-        rate, err := mcep.rate(sym[0], sym[1])
+        rate, err := mcep.rate(strings.ToUpper(sym[0]), strings.ToUpper(sym[1]))
         
         if err != nil {
             http.Error(w, err.Error(), http.StatusInternalServerError)
