@@ -6,6 +6,8 @@ import (
     "bytes"
     "strings"
     "time"
+    "log"
+    "errors"
 )
 
 type currencyExchangeProvider interface {
@@ -87,12 +89,14 @@ func (c fixerio) rate(currencySymbol1 string, currencySymbol2 string) (float64, 
     b := buf.Bytes()
 
     if err := json.Unmarshal(b, &data); err != nil {
-        panic(err)
+        log.Println("json unmarshal error")
     }
-    if rates, ok := (data["rates"]).(map[string]interface{}); ok {
-        // fmt.Printf("%f\n", rates[currencySymbol2])
-        return rates[currencySymbol2].(float64), nil
-    } else {
-        panic(ok)
+    for rates, ok := (data["rates"]).(map[string]interface{});; {
+        if ok {
+            return rates[currencySymbol2].(float64), nil
+        }
+        log.Printf("%+v\n", data["rates"])
+        log.Println("type assertion error")
+        return 0, errors.New("rate limit exceeded")
     }
 }
