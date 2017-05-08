@@ -22,3 +22,8 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# Executable and input files
+bot
+rate_mailer
+credentials
